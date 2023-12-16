@@ -1,5 +1,6 @@
 import cookieParser from "cookie-parser";
 import express from "express";
+import cors from "cors";
 
 const app = express();
 
@@ -15,14 +16,6 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-app
-  .get("/", async (req, res, next) => {
-    const val = await getDataFromDB(req);
-  })
-  .then(() => {
-    console.log("we got the data");
-  })
-  .catch(() => {
-    console.log("we got the error");
-  });
+import userRouter from "./routes/user.routes.js";
+app.use("/api/v1/users", userRouter);
 export { app };
