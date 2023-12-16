@@ -7,3 +7,4 @@ const registerUser = asyncHandler((req, res) => {
 });
 
 export default registerUser;
+// comment for adding changes to git with current email
