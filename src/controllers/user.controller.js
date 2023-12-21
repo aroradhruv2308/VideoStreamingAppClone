@@ -70,7 +70,7 @@ const generateRefreshAndAccessToken = async (userId) => {
   await user.save({ validateBeforeSave: false });
   return { accessToken, refreshToken };
 };
-const loginUser = asyncHandler(async (req, res) => {
+export const loginUser = asyncHandler(async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
@@ -114,6 +114,30 @@ const loginUser = asyncHandler(async (req, res) => {
         })
       );
   } catch (error) {}
+});
+
+export const logoutUser = asyncHandler(async (req, res) => {
+  User.findByIdAndUpdate(async (req, res) => {
+    req.user._id,
+      {
+        $set: {
+          refreshToken: undefined,
+        },
+      },
+      {
+        new: true,
+      };
+  });
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options),
+    json(200, {}, "User LoggedOut");
 });
 export default registerUser;
 // comment for adding changes to git with current email
